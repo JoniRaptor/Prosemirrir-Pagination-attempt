@@ -1,0 +1,37 @@
+import { Schema, type NodeSpec } from 'prosemirror-model';
+
+export const schema = new Schema({
+  nodes: {
+    doc: {
+      content: 'page+'
+    },
+    page: {
+      content: 'header body footer',
+      group: 'page',
+      isolating: true, // Verhindert, dass man über Seitengrenzen hinweg löscht
+      toDOM: () => ['div', { class: 'page' }, 0]
+    },
+    header: {
+      content: 'paragraph+',
+      toDOM: () => ['div', { class: 'page-header' }, 0]
+    },
+    body: {
+      content: 'block+',
+      isolating: true,
+      toDOM: () => ['div', { class: 'page-body' }, 0]
+    },
+    footer: {
+      content: 'paragraph+',
+      toDOM: () => ['div', { class: 'page-footer' }, 0]
+    },
+    paragraph: {
+      content: 'inline*',
+      group: 'block',
+      toDOM: () => ['p', 0],
+      parseDOM: [{ tag: 'p' }]
+    },
+    text: {
+      group: 'inline'
+    }
+  }
+});
